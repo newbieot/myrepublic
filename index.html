@@ -45,7 +45,6 @@
             border-bottom: 5px solid var(--cinnabar);
         }
 
-        /* Container Drop Zone & Template */
         .upload-container {
             background: white;
             border-radius: 20px;
@@ -126,19 +125,21 @@
             
             <div class="upload-container">
                 <div id="drop-zone">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h4>DRAG & DROP FILE EXCEL MYREPUBLIC</h4>
-                    <p class="text-muted">Tarik file Bapak ke sini atau klik untuk pilih file.</p>
-                    <input type="file" id="file-input" hidden accept=".xlsx, .xls, .csv">
+                    <i class="fas fa-file-import"></i>
+                    <h4>DRAG & DROP FILE EXCEL / HTML BAST</h4>
+                    <p class="text-muted">Tarik satu/banyak file .htm (BAST) atau .xlsx ke sini.</p>
+                    
+                    <input type="file" id="file-input" hidden accept=".xlsx, .xls, .csv, .htm, .html" multiple>
                 </div>
 
                 <div class="template-download-area">
-                    <p class="mb-2 text-secondary small fw-bold">BELUM PUNYA FORMATNYA?</p>
+                    <p class="mb-2 text-secondary small fw-bold">BELUM PUNYA FORMAT EXCEL-NYA?</p>
                     <a href="https://raw.githubusercontent.com/newbieot/myrepublic/refs/heads/main/Template_Input_MyRepublic_KCU_Batam.xlsx" 
                        class="btn btn-outline-dark btn-sm px-4" 
                        style="border-radius: 30px;" 
                        target="_blank"
-                       onclick="event.stopPropagation();"> <i class="fas fa-download me-2 text-success"></i> UNDUH TEMPLATE STANDAR
+                       onclick="event.stopPropagation();">
+                        <i class="fas fa-download me-2 text-success"></i> UNDUH TEMPLATE STANDAR
                     </a>
                 </div>
             </div>
@@ -168,7 +169,6 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-    // Database Kodepos (Sesuai file yang Bapak upload)
     const rawDataKodepos = `Kode Pos,KOTA
 29400,BATAM
 10000,JAKARTAPUSAT
@@ -246,7 +246,7 @@
             if(match) elemenSelect.val(match.id).trigger('change');
             else elemenSelect.val('29400').trigger('change');
         } else {
-            elemenSelect.val('29400').trigger('change');
+            elemenSelect.val('29400').trigger('change'); // Default selalu Batam
         }
     }
 
@@ -267,26 +267,98 @@
 
     function handleFiles(files) {
         if (!files.length) return;
-        const file = files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const json = XLSX.utils.sheet_to_json(sheet);
+        
+        // Loop untuk memproses banyak file sekaligus
+        Array.from(files).forEach(file => {
+            const fileName = file.name.toLowerCase();
 
-            json.forEach(row => {
-                tambahPenerima({
-                    sn: row['S/N'] || row['sn'] || '',
-                    ref: row['Ref No'] || row['ref_no'] || '',
-                    nama: row['Nama Penerima'] || row['penerima'] || '',
-                    hp: row['No HP'] || row['phone'] || '',
-                    alamat: row['Alamat'] || row['address'] || '',
-                    kota: row['Kota'] || row['city'] || 'BATAM'
-                });
-            });
-        };
-        reader.readAsArrayBuffer(file);
+            // ==========================================
+            // LOGIKA SCRAPING HTML
+            // ==========================================
+            if (fileName.endsWith('.htm') || fileName.endsWith('.html')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const htmlContent = e.target.result;
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlContent, 'text/html');
+
+                    try {
+                        let nama = "", hp = "", alamat = "", noDO = "", sn = "";
+
+                        // 1. Ekstrak Data Kiri Atas (Nama, HP, Alamat)
+                        const topDiv = doc.querySelector('table.t02 tr td div');
+                        if (topDiv) {
+                            // Split berdasarkan <br> tag (case insensitive)
+                            const lines = topDiv.innerHTML.split(/<br\s*\/?>/i);
+                            if (lines.length >= 3) {
+                                nama = lines[0].replace(/<[^>]*>?/gm, '').trim(); // Buang tag <b>
+                                hp = lines[1].trim();
+                                alamat = lines[2].trim();
+                            }
+                        }
+
+                        // 2. Ekstrak No. DO
+                        const tdsT03 = doc.querySelectorAll('#t03 td');
+                        for (let i = 0; i < tdsT03.length; i++) {
+                            if (tdsT03[i].innerText.includes('No. DO')) {
+                                // Ambil cell di sebelahnya dan hilangkan titik dua
+                                noDO = tdsT03[i + 1].innerText.replace(':', '').trim();
+                                break;
+                            }
+                        }
+
+                        // 3. Ekstrak S/N (Ket) dari tabel t04
+                        // Loop baris tr ke-3 ke bawah (melewati 2 baris header)
+                        const t04Rows = doc.querySelectorAll('#t04 tr');
+                        let snList = [];
+                        for (let i = 2; i < t04Rows.length; i++) {
+                            const tds = t04Rows[i].querySelectorAll('td');
+                            if (tds.length >= 5) {
+                                snList.push(tds[4].innerText.trim());
+                            }
+                        }
+                        sn = snList.join(', '); // Gabung jika ada lebih dari 1 produk
+
+                        tambahPenerima({
+                            sn: sn,
+                            ref: noDO,
+                            nama: nama,
+                            hp: hp,
+                            alamat: alamat,
+                            kota: 'BATAM' // Sesuai instruksi, di defaultkan ke BATAM
+                        });
+
+                    } catch (error) {
+                        console.error("Gagal membaca HTML:", error);
+                    }
+                };
+                reader.readAsText(file);
+            } 
+            // ==========================================
+            // LOGIKA EXCEL (.xlsx, .csv) TETAP JALAN
+            // ==========================================
+            else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet);
+
+                    json.forEach(row => {
+                        tambahPenerima({
+                            sn: row['S/N'] || row['sn'] || '',
+                            ref: row['Ref No'] || row['ref_no'] || '',
+                            nama: row['Nama Penerima'] || row['penerima'] || '',
+                            hp: row['No HP'] || row['phone'] || '',
+                            alamat: row['Alamat'] || row['address'] || '',
+                            kota: row['Kota'] || row['city'] || 'BATAM'
+                        });
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
     }
 
     $(document).ready(function() {
