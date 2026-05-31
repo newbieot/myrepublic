@@ -185,12 +185,80 @@
     </div>
 </div>
 
-<footer class="text-center">
-    <div class="container text-muted">
-        Copyright 2026 Corporate Sales Team KCU Batam 29400 Pos Indonesia
+<!-- Modern SaaS Footer (SLIM & DARK BACKGROUND) -->
+<style>
+    .modern-footer {
+        margin-top: 3rem; /* Memangkas jarak kosong di atas footer */
+        padding: 2rem 1rem 1.5rem 1rem; /* Memangkas ketebalan (padding) agar tidak 'gendut' */
+        background-color: #0f172a; /* Background gelap pekat */
+        border-top: 4px solid #FF5722; /* Garis aksen Postal Orange di bagian atas */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem; /* Merapatkan jarak antar teks */
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #f8fafc; /* Teks putih terang */
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+    .footer-desc {
+        color: #94a3b8; /* Teks abu-abu terang */
+        font-size: 0.85rem;
+        text-align: center;
+        max-width: 500px;
+        line-height: 1.5;
+        margin: 0;
+    }
+    .footer-creator-badge {
+        margin-top: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 87, 34, 0.1);
+        border: 1px solid rgba(255, 87, 34, 0.2);
+        padding: 6px 16px; /* Lencana dibuat lebih ramping */
+        border-radius: 30px;
+        color: #e2e8f0;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+    .footer-creator-badge:hover {
+        background: rgba(255, 87, 34, 0.2);
+        border-color: rgba(255, 87, 34, 0.5);
+        box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
+        transform: translateY(-2px);
+    }
+    .footer-creator-badge strong {
+        color: #FF5722;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+</style>
+<footer class="modern-footer">
+    <div class="footer-brand">
+        <i data-lucide="layers" style="color: #FF5722; width: 20px; height: 20px;"></i>
+        PosNew Hub
+    </div>
+    <p class="footer-desc">
+        Sistem utilitas ini dikembangkan secara independen untuk optimalisasi efisiensi layanan logistik B2B dan Ritel.
+    </p>
+    <div class="footer-creator-badge">
+        <i data-lucide="code-2" style="color: #FF5722; width: 14px; height: 14px;"></i>
+        Inovasi oleh <strong>Ikhsan Radiansyah</strong> &copy; 2026
     </div>
 </footer>
 
+<!-- Script Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
