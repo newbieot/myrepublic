@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-31 — Customer and product code update
+
+### Changed
+
+- Updated customer ID from `WSREPUBLIC02130B` to `WSREPUBLIC02154B`.
+- Updated product/sub-service code from `913926` to `915436`.
+- Refreshed the export script cache version so deployed browsers load the new configuration.
+
 ## 2026-07-28 — Complete UI/UX redesign
 
 ### Added

@@ -41,13 +41,13 @@ The new interface uses a slim sticky header, compact introduction, two-column de
 
 No account constant or workbook header was changed. The following values remain exactly compatible with the original workflow:
 
-- Customer code: `WSREPUBLIC02130B`
+- Customer code: `WSREPUBLIC02154B`
 - Sender: `WH KCU BATAM`
 - Sender phone: `0778462033`
 - Origin postcode: `29411`
 - Origin zone: `29400`
 - Service code: `PKH`
-- Sub-service code: `913926`
+- Sub-service code: `915436`
 - Weight: `1`
 - Dimensions: `16 × 6 × 30`
 - Payment type: `INVOICE`

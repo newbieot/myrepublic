@@ -53,9 +53,9 @@ The redesigned application preserves:
 - the exact workbook header order;
 - sheet name `Sheet1`;
 - output filename `MyRepublic_Pos_Batam_Batch.xlsx`;
-- customer code `WSREPUBLIC02130B`;
+- customer code `WSREPUBLIC02154B`;
 - sender identity and origin values;
-- service code `PKH` and sub-service code `913926`;
+- service code `PKH` and sub-service code `915436`;
 - shipment dimensions and weight;
 - payment, item, return, and delivery-instruction values;
 - destination zone logic;
