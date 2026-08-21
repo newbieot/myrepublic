@@ -1,6 +1,6 @@
 (function(global){
   'use strict';
-  const HEADERS=["connote_code","customer_code","origin_data_customer_name","origin_data_customer_phone","origin_data_customer_address","origin_data_customer_zip_code","origin_data_zone_code","destination_data_customer_name","destination_data_customer_phone","destination_data_customer_address","destination_data_customer_zip_code","destination_data_zone_code","service_code","connote_sub_service_code","koli_data_koli_description","koli_data_koli_weight","koli_data_koli_width","koli_data_koli_height","koli_data_koli_length","transaction_payment_type_name","instruksi_pengiriman","harga_barang","ref_no","Jenis_Barang","statusRetur","INS"];
+  const HEADERS=["connote_code","customer_code","origin_data_customer_name","origin_data_customer_phone","origin_data_customer_address","origin_data_customer_zip_code","origin_data_zone_code","destination_data_customer_name","destination_data_customer_phone","destination_data_customer_address","destination_data_customer_zip_code","destination_data_zone_code","service_code","connote_sub_service_code","koli_data_koli_description","koli_data_koli_weight","koli_data_koli_width","koli_data_koli_height","koli_data_koli_length","transaction_payment_type_name","instruksi_pengiriman","harga_barang","ref_no","Jenis_Barang","statusRetur"];
   const FILE_NAME='MyRepublic_Pos_Batam_Batch.xlsx';
   const SHEET_NAME='Sheet1';
   const CONSTANTS={customer_code:'WSREPUBLIC02154B',origin_data_customer_name:'WH KCU BATAM',origin_data_customer_phone:'0778462033',origin_data_customer_zip_code:29411,origin_data_zone_code:29400,service_code:'PKH',connote_sub_service_code:915436,koli_data_koli_weight:1,koli_data_koli_width:16,koli_data_koli_height:6,koli_data_koli_length:30,transaction_payment_type_name:'INVOICE',instruksi_pengiriman:'Tolong diantar dengan baik',harga_barang:0,Jenis_Barang:'Paket',statusRetur:'Kembali ke pengirim'};
@@ -16,7 +16,7 @@
         destination_data_customer_name:global.MyRepValidation.sanitizeGeneral(record.name),destination_data_customer_phone:global.MyRepValidation.sanitizePhone(record.phone),destination_data_customer_address:global.MyRepValidation.sanitizeAddress(record.address),
         destination_data_customer_zip_code:Number(postcodeFromZone(city.code)),destination_data_zone_code:Number(city.code),service_code:CONSTANTS.service_code,connote_sub_service_code:CONSTANTS.connote_sub_service_code,
         koli_data_koli_description:reference,koli_data_koli_weight:CONSTANTS.koli_data_koli_weight,koli_data_koli_width:CONSTANTS.koli_data_koli_width,koli_data_koli_height:CONSTANTS.koli_data_koli_height,koli_data_koli_length:CONSTANTS.koli_data_koli_length,
-        transaction_payment_type_name:CONSTANTS.transaction_payment_type_name,instruksi_pengiriman:CONSTANTS.instruksi_pengiriman,harga_barang:CONSTANTS.harga_barang,ref_no:reference,Jenis_Barang:CONSTANTS.Jenis_Barang,statusRetur:CONSTANTS.statusRetur,INS:''
+        transaction_payment_type_name:CONSTANTS.transaction_payment_type_name,instruksi_pengiriman:CONSTANTS.instruksi_pengiriman,harga_barang:CONSTANTS.harga_barang,ref_no:reference,Jenis_Barang:CONSTANTS.Jenis_Barang,statusRetur:CONSTANTS.statusRetur
       };
     });
   }
