@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-24 — Export cache refresh
+
+- Refreshed the export script cache version so browsers load the workbook schema without the removed `INS` column.
+
 ## 2026-07-31 — Customer and product code update
 
 ### Changed
